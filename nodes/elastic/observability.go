@@ -1,6 +1,6 @@
 package elastic
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/dahendel/go-diagrams/diagram"
 
 type observabilityContainer struct {
 	path string

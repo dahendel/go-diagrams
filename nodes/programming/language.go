@@ -1,6 +1,6 @@
 package programming
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/dahendel/go-diagrams/diagram"
 
 type languageContainer struct {
 	path string

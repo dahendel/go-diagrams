@@ -6,22 +6,22 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-
+	
 	graphviz "github.com/awalterschulze/gographviz"
-	"github.com/blushft/go-diagrams/nodes/assets"
-	"github.com/blushft/go-diagrams/pkg/rand"
+	"github.com/dahendel/go-diagrams/nodes/assets"
+	"github.com/dahendel/go-diagrams/pkg/rand"
 )
 
 type Node struct {
 	id string
-
+	
 	conn    Connector
 	Options NodeOptions
 }
 
 func NewNode(opts ...NodeOption) *Node {
 	options := DefaultNodeOptions(opts...)
-
+	
 	return &Node{
 		id:      rand.String(8),
 		Options: options,
@@ -47,29 +47,29 @@ func (n *Node) render(parent string, path string, graph *graphviz.Escape) error 
 		if err != nil {
 			return err
 		}
-
+		
 		outDir := filepath.Join(path, filepath.Dir(n.Options.Image))
 		if err := os.MkdirAll(outDir, os.ModePerm); err != nil {
 			return err
 		}
-
+		
 		outFile := filepath.Join(outDir, filepath.Base(n.Options.Image))
 		if err := ioutil.WriteFile(outFile, img, os.ModePerm); err != nil {
 			return err
 		}
 	}
-
+	
 	return graph.AddNode(parent, n.id, n.attrs())
 }
 
 func (n *Node) attrs() map[string]string {
-
+	
 	if n.Options.Image != "" {
 		labelH := float64(len(strings.Split(n.Options.Label, "/n")))
 		n.Options.Height = n.Options.Height + (0.4 * labelH)
 		n.Options.Shape = "none"
 	}
-
+	
 	attrs := map[string]string{
 		"label":      n.Options.Label,
 		"image":      n.Options.Image,
@@ -84,11 +84,11 @@ func (n *Node) attrs() map[string]string {
 		"fontname":   n.Options.Font.Name,
 		"fontcolor":  n.Options.Font.Color,
 	}
-
+	
 	for k, v := range n.Options.Attributes {
 		attrs[k] = v
 	}
-
+	
 	return trimAttrs(attrs)
 }
 
@@ -99,7 +99,7 @@ func renderNodes(name, out string, graph *graphviz.Escape, nodes ...*Node) error
 			return err
 		}
 	}
-
+	
 	return nil
 }
 
@@ -141,23 +141,23 @@ func DefaultNodeOptions(opts ...NodeOption) NodeOptions {
 		},
 		Attributes: make(map[string]string),
 	}
-
+	
 	for _, o := range opts {
 		o(&nopts)
 	}
-
+	
 	return nopts
 }
 
 func MergeOptionSets(sets ...OptionSet) OptionSet {
 	ns := OptionSet{}
-
+	
 	for _, set := range sets {
 		for _, opt := range set {
 			ns = append(ns, opt)
 		}
 	}
-
+	
 	return ns
 }
 

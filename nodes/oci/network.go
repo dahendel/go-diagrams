@@ -1,6 +1,6 @@
 package oci
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/dahendel/go-diagrams/diagram"
 
 type networkContainer struct {
 	path string

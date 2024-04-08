@@ -1,6 +1,6 @@
 package aws
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/dahendel/go-diagrams/diagram"
 
 type analyticsContainer struct {
 	path string

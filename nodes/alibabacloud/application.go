@@ -1,6 +1,6 @@
 package alibabacloud
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/dahendel/go-diagrams/diagram"
 
 type applicationContainer struct {
 	path string
