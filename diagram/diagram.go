@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-
+	
 	graphviz "github.com/awalterschulze/gographviz"
 )
 
@@ -16,9 +16,9 @@ type Connector interface {
 
 type Diagram struct {
 	options Options
-
+	
 	g *graphviz.Escape
-
+	
 	root *Group
 }
 
@@ -27,13 +27,13 @@ func New(opts ...Option) (*Diagram, error) {
 	g := graphviz.NewEscape()
 	g.SetName("root")
 	g.SetDir(true)
-
+	
 	for k, v := range options.attrs() {
 		if err := g.AddAttr("root", k, v); err != nil {
 			return nil, err
 		}
 	}
-
+	
 	return new(g, options), nil
 }
 
@@ -69,7 +69,7 @@ func (d *Diagram) Connect(start, end *Node, opts ...EdgeOption) *Diagram {
 
 func (d *Diagram) ConnectByID(start, end string, opts ...EdgeOption) *Diagram {
 	d.root.ConnectByID(start, end, opts...)
-
+	
 	return d
 }
 
@@ -88,30 +88,30 @@ func (d *Diagram) Render() error {
 
 func (d *Diagram) render() error {
 	outdir := d.options.Name
-	if err := os.Mkdir(outdir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(outdir, os.ModePerm); err != nil {
 		return err
 	}
-
+	
 	for _, n := range d.root.nodes {
 		err := n.render("root", outdir, d.g)
 		if err != nil {
 			return err
 		}
 	}
-
+	
 	for _, e := range d.root.edges {
 		err := e.render(e.Start(), e.End(), d.g)
 		if err != nil {
 			return err
 		}
 	}
-
+	
 	for _, g := range d.root.children {
 		if err := g.render(outdir, d.g); err != nil {
 			return err
 		}
 	}
-
+	
 	return d.renderOutput()
 }
 
@@ -126,6 +126,6 @@ func (d *Diagram) renderOutput() error {
 
 func (d *Diagram) saveDot() error {
 	fname := filepath.Join(d.options.Name, d.options.FileName+".dot")
-
+	
 	return ioutil.WriteFile(fname, []byte(d.g.String()), os.ModePerm)
 }
